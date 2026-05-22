@@ -56,12 +56,12 @@ describe('buildEvents', () => {
 
   it('builds knockout summary with known teams', () => {
     const [ev] = buildEvents([KNOCKOUT_KNOWN], new Map(), NOW);
-    assert.equal(ev.summary, 'QF1: France vs Brazil');
+    assert.equal(ev.summary, 'QF-1: France vs Brazil');
   });
 
   it('builds knockout summary with TBD teams using human-readable labels', () => {
     const [ev] = buildEvents([KNOCKOUT_TBD], new Map(), NOW);
-    assert.equal(ev.summary, 'R321: Group A Winner vs Group B Runner-up');
+    assert.equal(ev.summary, 'R32-1: Group A Winner vs Group B Runner-up');
   });
 
   it('converts kickoff to UTC and sets 150-min duration', () => {

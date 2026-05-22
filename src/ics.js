@@ -11,14 +11,22 @@ export function escapeText(str) {
 }
 
 function foldLine(line) {
-  if (line.length <= 75) return line;
+  const bytes = Buffer.from(line, 'utf8');
+  if (bytes.length <= 75) return line;
   const parts = [];
-  let remaining = line;
+  let offset = 0;
   let first = true;
-  while (remaining.length > 0) {
+  while (offset < bytes.length) {
     const limit = first ? 75 : 74;
-    parts.push(remaining.slice(0, limit));
-    remaining = remaining.slice(limit);
+    let end = offset + limit;
+    if (end >= bytes.length) {
+      end = bytes.length;
+    } else {
+      // Back up to avoid splitting a multibyte UTF-8 sequence
+      while (end > offset && (bytes[end] & 0xC0) === 0x80) end--;
+    }
+    parts.push(bytes.slice(offset, end).toString('utf8'));
+    offset = end;
     first = false;
   }
   return parts.join('\r\n ');

@@ -90,7 +90,7 @@ export function buildEvents(matches, seqMap, now) {
     if (shortLabel && !match.group) {
       if (['R32', 'R16', 'QF', 'SF'].includes(shortLabel)) {
         roundCounters[shortLabel] = (roundCounters[shortLabel] ?? 0) + 1;
-        roundLabel = `${shortLabel}${roundCounters[shortLabel]}`;
+        roundLabel = `${shortLabel}-${roundCounters[shortLabel]}`;
       } else {
         roundLabel = shortLabel;
       }

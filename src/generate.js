@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { join, dirname } from 'node:path';
 import { buildEvents } from './events.js';
 import { buildVcalendar, parseExistingSequences } from './ics.js';
+import { parseKickoffUtc } from './time.js';
 
 const DATA_URL =
   'https://raw.githubusercontent.com/openfootball/worldcup.json/master/2026/worldcup.json';
@@ -17,11 +18,21 @@ async function main() {
   const { matches } = await res.json();
   console.log(`Fetched ${matches.length} matches.`);
 
+  const parseableMatches = matches.filter((m, i) => {
+    try {
+      parseKickoffUtc(m.date, m.time);
+      return true;
+    } catch {
+      console.warn(`Skipping match #${i + 1} ${m.date ?? 'unknown'} (${m.team1 ?? '?'} vs ${m.team2 ?? '?'}): unparseable time "${m.time}"`);
+      return false;
+    }
+  });
+
   const existing = existsSync(OUT_PATH) ? readFileSync(OUT_PATH, 'utf8') : '';
   const seqMap = parseExistingSequences(existing);
 
   const now = new Date();
-  const events = buildEvents(matches, seqMap, now);
+  const events = buildEvents(parseableMatches, seqMap, now);
   const icsContent = buildVcalendar(events);
 
   writeFileSync(OUT_PATH, icsContent, 'utf8');

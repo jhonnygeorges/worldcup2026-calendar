@@ -1,7 +1,9 @@
 const VENUES = {
   'Mexico City': 'Estadio Azteca, Mexico City',
   'Monterrey': 'Estadio BBVA, Monterrey',
+  'Monterrey (Guadalupe)': 'Estadio BBVA, Monterrey',
   'Guadalajara': 'Estadio Akron, Guadalajara',
+  'Guadalajara (Zapopan)': 'Estadio Akron, Guadalajara',
   'Vancouver': 'BC Place, Vancouver',
   'Toronto': 'BMO Field, Toronto',
   'Dallas (Arlington)': 'AT&T Stadium, Arlington (Dallas)',
